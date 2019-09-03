@@ -4,16 +4,14 @@ module Hotel
 
     def initialize
       @NUMBER_OF_ROOMS = 20
-      # @rooms = initialize_rooms
-      # rooms equals array with 20.times management_system.new being pushed in
-
+      @rooms = []
+      initialize_rooms
     end
 
     def initialize_rooms
-      # rooms = []
-      # @NUMBER_OF_ROOMS.times do
-      #   rooms << Room.new
-      # end
+      @NUMBER_OF_ROOMS.times do
+        @rooms << Hotel::Room.new(@rooms.length)
+      end
 
     end
 
