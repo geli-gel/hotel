@@ -34,7 +34,6 @@ describe "management system class" do
       @management_system.create_reservation(
         check_in_date: Date.today,
         check_out_date: Date.today + 1,
-        room_number: 1
         )
       new_reservation_list_length = initial_reservation_list_length + 1
 
