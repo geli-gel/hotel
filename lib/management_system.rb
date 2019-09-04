@@ -6,6 +6,7 @@ module Hotel
       @NUMBER_OF_ROOMS = 20
       @rooms = []
       initialize_rooms
+      @reservations = []
     end
 
     def initialize_rooms
@@ -28,6 +29,7 @@ module Hotel
         check_out_date: check_out_date,
         room: room
         )
+      @reservations << new_reservation
     end
 
     def find_room_by_number(room_number)

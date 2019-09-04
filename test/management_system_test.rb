@@ -28,4 +28,19 @@ describe "management system class" do
     end
   end
 
+  describe "create_reservation method" do
+    it "adds a new reservation to @reservations" do
+      initial_reservation_list_length = @management_system.reservations.length
+      @management_system.create_reservation(
+        check_in_date: 'test_start_date',
+        check_out_date: 'test_end_date',
+        room_number: 1
+        )
+      new_reservation_list_length = initial_reservation_list_length + 1
+
+      expect(@management_system.reservations.length).must_equal \
+        new_reservation_list_length
+    end
+  end
+
 end
