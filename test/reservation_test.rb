@@ -36,4 +36,10 @@ describe "reservation class" do
     }
   end
 
+  describe "total_cost method" do
+    it "returns total cost of the reservation" do
+      
+    end
+  end
+
 end
