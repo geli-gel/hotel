@@ -21,8 +21,19 @@ module Hotel
     def reservations_for_night(night)
     end
 
-    def create_reservation(check_in_date:, check_out_date:, room_number: nil)
+    def create_reservation(check_in_date:, check_out_date:, room_number:)
+      room = find_room_by_number(room_number)
+      new_reservation = Hotel::Reservation.new(
+        check_in_date: check_in_date, 
+        check_out_date: check_out_date,
+        room: room
+        )
     end
+
+    def find_room_by_number(room_number)
+      return @rooms.find {|room| room.number == room_number}
+
+    end  
 
   end
 end
