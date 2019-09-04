@@ -42,4 +42,42 @@ describe "management system class" do
     end
   end
 
+  describe "reservations_by_date method" do
+    before do
+      @given_date = Date.today + 5
+      # First Reservation w/ Checkout Date on given_date
+      @management_system.create_reservation(
+        check_in_date: @given_date - 1,
+        check_out_date: @given_date,
+        )
+      # Second Reservation w/ check_in Date on given_date
+      @management_system.create_reservation(
+        check_in_date: @given_date,
+        check_out_date: @given_date + 1,
+        )
+      # Third Reservation w/ given_date not in reservation
+      @management_system.create_reservation(
+        check_in_date: @given_date + 8,
+        check_out_date: @given_date + 10,
+        )
+      # Fourth Reservation w/ given_date within check_in and check_out date
+      @management_system.create_reservation(
+        check_in_date: @given_date - 4,
+        check_out_date: @given_date + 4,
+        )
+    end
+
+    it "returns an array containing all reservations for a given date only" do
+      given_date_reservations = 
+        @management_system.reservations_by_date(@given_date)
+      total_reservations_in_system = 
+        @management_system.reservations.length
+        
+      expect(given_date_reservations.length).must_equal 3
+      expect(total_reservations_in_system).must_equal 4 
+      expect(given_date_reservations).must_be_instance_of Array
+      expect(given_date_reservations[0]).must_be_instance_of Hotel::Reservation     
+    end
+  end
+
 end
