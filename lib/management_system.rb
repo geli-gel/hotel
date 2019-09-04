@@ -34,7 +34,6 @@ module Hotel
 
     def find_room_by_number(room_number)
       return @rooms.find {|room| room.number == room_number}
-
     end  
 
   end
