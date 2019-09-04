@@ -12,7 +12,10 @@ module Hotel
       @NUMBER_OF_ROOMS.times do
         @rooms << Hotel::Room.new(@rooms.length)
       end
+    end
 
+    def list_rooms
+      return @rooms
     end
 
     def reservations_for_night(night)
