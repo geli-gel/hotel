@@ -25,7 +25,6 @@ module Hotel
       end
     end
 
-
     def create_reservation(check_in_date:, check_out_date:)
       new_reservation = Hotel::Reservation.new(
         check_in_date: check_in_date, 

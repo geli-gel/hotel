@@ -17,7 +17,11 @@ module Hotel
 
     def total_cost
       nightly_rate = @room.nightly_rate
-      # nightly_rate * #number of nights
+      return nightly_rate * total_nights
+    end
+
+    def total_nights
+      return @check_out_date - @check_in_date
     end
 
   end

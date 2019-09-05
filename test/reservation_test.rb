@@ -38,7 +38,7 @@ describe "reservation class" do
 
   describe "total_cost method" do
     it "returns total cost of the reservation" do
-      
+      expect(@reservation.total_cost).must_equal 200
     end
   end
 
