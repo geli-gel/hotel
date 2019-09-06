@@ -5,15 +5,16 @@ module Hotel
 
     def initialize
       @NUMBER_OF_ROOMS = 20
-      @rooms = []
-      initialize_rooms
+      @rooms = initialize_rooms
       @reservations = []
     end
 
     def initialize_rooms
+      initial_rooms = []
       @NUMBER_OF_ROOMS.times do
-        @rooms << Hotel::Room.new(@rooms.length)
+        initial_rooms << Hotel::Room.new(initial_rooms.length)
       end
+      return initial_rooms
     end
 
     def list_rooms
