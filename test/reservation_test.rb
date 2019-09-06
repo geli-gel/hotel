@@ -14,20 +14,19 @@ describe "reservation class" do
     expect(@reservation).must_be_instance_of Hotel::Reservation
   end
 
-  it "raises a ReservationError if check_in_date is before current date" do
-    assert_raises(Hotel::Reservation::ReservationError) { 
+  it "raises a ReservationDateError if check_in_date is before current date" do
+    assert_raises(Hotel::Reservation::ReservationDateError) { 
       Hotel::Reservation.new(
-      check_in_date: Date.new(2004,5,3),
-      check_out_date: Date.new(2004,5,4),
+      check_in_date: Date.today - 3,
+      check_out_date: Date.today - 1,
       room: @room_1
       ) 
     }
   end
 
-  it "raises a ReservationError if check_out_date is before check_in_date" do
+  it "raises a ReservationDateError if check_out_date is before check_in_date" do
     yesterday = Date.today - 1
-    puts yesterday
-    assert_raises(Hotel::Reservation::ReservationError) { 
+    assert_raises(Hotel::Reservation::ReservationDateError) { 
       Hotel::Reservation.new(
       check_in_date: Date.today,
       check_out_date: yesterday,
