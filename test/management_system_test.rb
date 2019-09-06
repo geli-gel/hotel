@@ -4,6 +4,7 @@ describe "management system class" do
 
   before do
     @management_system = Hotel::ManagementSystem.new
+    @total_number_of_rooms = 20
   end
 
   it "can initialize" do
@@ -17,7 +18,7 @@ describe "management system class" do
     expect(room_1).must_be_instance_of Hotel::Room
     expect(room_20).must_be_instance_of Hotel::Room
     expect(nonexistent_room).must_be_instance_of NilClass
-    expect(@management_system.rooms.length).must_equal 20
+    expect(@management_system.rooms.length).must_equal @total_number_of_rooms
   end
 
   describe "list_rooms method" do
@@ -48,22 +49,22 @@ describe "management system class" do
       # First Reservation w/ Checkout Date on given_date
       @management_system.create_reservation(
         check_in_date: @given_date - 1,
-        check_out_date: @given_date,
+        check_out_date: @given_date
         )
       # Second Reservation w/ check_in Date on given_date
       @management_system.create_reservation(
         check_in_date: @given_date,
-        check_out_date: @given_date + 1,
+        check_out_date: @given_date + 1
         )
       # Third Reservation w/ given_date not in reservation
       @management_system.create_reservation(
         check_in_date: @given_date + 8,
-        check_out_date: @given_date + 10,
+        check_out_date: @given_date + 10
         )
       # Fourth Reservation w/ given_date within check_in and check_out date
       @management_system.create_reservation(
         check_in_date: @given_date - 4,
-        check_out_date: @given_date + 4,
+        check_out_date: @given_date + 4
         )
     end
 
@@ -78,6 +79,44 @@ describe "management system class" do
       expect(given_date_reservations).must_be_instance_of Array
       expect(given_date_reservations[0]).must_be_instance_of Hotel::Reservation     
     end
+
+    describe "available_rooms_for method" do
+      before do
+        @desired_check_in = @given_date
+        @desired_check_out = @given_date + 1
+        @available_rooms = @management_system.available_rooms_for(@desired_check_in, @desired_check_out)
+      end
+
+      it "returns array of rooms when rooms are available for a desired dates" do
+        # first reservation's room will be available since checkout date is on
+          # desired_check_in (first reservation checking out when new guest 
+          # checking in)
+
+        # ** second reservation's room will **NOT** be available since dates are equal
+        
+        # third reservation's room will be available since it's dates are way 
+          # in the future
+
+        # ** fourth reservation's room will **NOT** be available since it's dates 
+          # envelop the desired dates.
+        
+        # 20 - 2 (18 rooms) should be available for the desired dates
+        expect(@available_rooms.length).must_equal @total_number_of_rooms - 2
+      end
+
+      it "raises a SystemReservationError if there are no rooms available for desired dates" do
+        (@available_rooms.length).times do 
+          @management_system.create_reservation(
+            check_in_date: @desired_check_in,
+            check_out_date: @desired_check_out
+            )
+        end
+        assert_raises(Hotel::ManagementSystem::SystemReservationError) {
+          @management_system.available_rooms_for(@desired_check_in, @desired_check_out)
+        }
+      end
+    end
+
   end
 
 end
