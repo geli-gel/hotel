@@ -54,16 +54,19 @@ module Hotel
       rooms_from_numbers.each do |room|
         room.blocks << new_block
       end
-
+      return new_block
     end
 
     def reserve_blocked_room(block_id)
       block = find_block_by_id(block_id)
-
+      chosen_room = block.choose_room
+      if chosen_room == nil
+        raise SystemReservationError.new("There are no available rooms for the chosen block")
+      end      
       create_reservation(
         check_in_date: block.check_in_date, 
         check_out_date: block.check_out_date, 
-        room: block.rooms.sample
+        room: chosen_room
       )
     end
 
@@ -95,6 +98,11 @@ module Hotel
       else
         raise SystemReservationError.new("There are no available rooms for the desired_check_in and desired_check_out dates")
       end
+    end
+
+    def available_rooms_by_block(block_id)
+      block = find_block_by_id(block_id)
+      return block.available_rooms
     end
 
   end

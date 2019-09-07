@@ -171,6 +171,38 @@ describe "management system class" do
       end
     end
 
+    describe "reserve_blocked_room method" do
+      before do
+        # create a block
+        @new_block = @management_system.create_block(
+          check_in_date: Date.today,
+          check_out_date: Date.today + 1, 
+          room_numbers: [1,2,3], 
+          discount_rate: 150
+          )
+        @new_block_id = @new_block.id
+        @initial_available_rooms_count = @new_block.available_rooms.length
+      end
+      it "removes a room from the Block's list of available rooms" do
+        # reserve a blocked room
+        @management_system.reserve_blocked_room(@new_block_id)
+        post_available_rooms_count = @new_block.available_rooms.count
+        expect(post_available_rooms_count).must_equal @initial_available_rooms_count - 1
+      end
+
+      it "raises an error if there are no more available rooms" do
+        # reserve the block three times (since 3 rooms in block)
+        3.times do
+          @management_system.reserve_blocked_room(@new_block_id)
+        end
+        # assert raises error if try to reserve it again
+        assert_raises(Hotel::ManagementSystem::SystemReservationError) {
+          @management_system.reserve_blocked_room(@new_block_id)
+        }
+      end
+
+    end
+
   end
 
 end
