@@ -29,6 +29,9 @@ module Hotel
     end
 
     def create_block(check_in_date:, check_out_date:, room_numbers:, discount_rate:)
+      if room_numbers.length < 1 || room_numbers.length > 5
+        raise SystemReservationError.new("Cannot create block for less than 1 or more than 5 rooms")
+      end
       rooms_from_numbers = room_numbers.map do |room_number|
         @rooms.find do |room|
           room.number == room_number

@@ -61,6 +61,17 @@ describe "management system class" do
     it "adds the new block to each room's blocks" do
     end
 
+    it "raises SystemReservationError if room_numbers.length > 5" do
+      assert_raises(Hotel::ManagementSystem::SystemReservationError) {
+        @management_system.create_block(
+          check_in_date: Date.today,
+          check_out_date: Date.today + 1, 
+          room_numbers: [15,16,17,18,19,20], # (6 > 5)
+          discount_rate: 150
+          )
+      }
+    end
+
     it "raises SystemReservationError if a room in desired block is already reserved" do
       room_10 = @management_system.rooms[9]
       @management_system.create_reservation(
