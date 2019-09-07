@@ -36,11 +36,65 @@ describe "management system class" do
         check_in_date: Date.today,
         check_out_date: Date.today + 1,
         )
-      new_reservation_list_length = initial_reservation_list_length + 1
+      expected_new_reservation_list_length = initial_reservation_list_length + 1
 
       expect(@management_system.reservations.length).must_equal \
-        new_reservation_list_length
+        expected_new_reservation_list_length
     end
+  end
+
+  describe "create_block method" do
+    it "adds a new block to @blocks" do
+      initial_blocks_list_length = @management_system.blocks.length
+      @management_system.create_block(
+        check_in_date: Date.today,
+        check_out_date: Date.today + 1, 
+        room_numbers: [1,2,3], 
+        discount_rate: 150
+        )
+      expected_new_blocks_list_length = initial_blocks_list_length + 1
+
+      expect(@management_system.blocks.length).must_equal \
+        expected_new_blocks_list_length
+    end
+
+    it "adds the new block to each room's blocks" do
+    end
+
+    it "raises SystemReservationError if a room in desired block is already reserved" do
+      room_10 = @management_system.rooms[9]
+      @management_system.create_reservation(
+        check_in_date: Date.today,
+        check_out_date: Date.today + 1,
+        room: room_10
+        )
+      assert_raises(Hotel::ManagementSystem::SystemReservationError) {
+        @management_system.create_block(
+          check_in_date: Date.today,
+          check_out_date: Date.today + 1, 
+          room_numbers: [10,12,15], # room_10 is part of the above created reservation
+          discount_rate: 150
+          )
+      }
+    end
+
+    it "raises SystemReservationError if a room in desired block is already in another block" do
+      @management_system.create_block(
+        check_in_date: Date.today,
+        check_out_date: Date.today + 1, 
+        room_numbers: [1,2,3], 
+        discount_rate: 150
+        )
+      assert_raises(Hotel::ManagementSystem::SystemReservationError) {
+        @management_system.create_block(
+          check_in_date: Date.today,
+          check_out_date: Date.today + 1, 
+          room_numbers: [3,4,5], # room_3 is part of the above created block
+          discount_rate: 150
+          )
+      }
+    end
+
   end
 
   describe "reservations_by_date method" do

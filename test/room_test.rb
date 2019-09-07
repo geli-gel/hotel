@@ -23,6 +23,7 @@ describe "room class" do
         room: @room_1
         )
     end
+
     it "returns :UNAVAILABLE if desired date range is already reserved" do
       status = @room_1.status(desired_check_in: @check_in,
                               desired_check_out: @check_out
@@ -53,6 +54,54 @@ describe "room class" do
                               )
       expect(status).must_equal :AVAILABLE
     end
-  end
 
+    describe "status method with Blocks" do
+      before do
+        @room_2 = Hotel::Room.new(1)
+        @room_3 = Hotel::Room.new(2)
+
+        @room_4 = Hotel::Room.new(3)
+        @room_5 = Hotel::Room.new(4)
+        @room_6 = Hotel::Room.new(5)
+
+        @all_test_rooms = [@room_1, @room_2, @room_3, @room_4, @room_5, @room_6]
+        @blocked_rooms = [@room_1, @room_2, @room_3]
+        @unblocked_rooms = [@room_4, @room_5, @room_6]
+        # block off a far off date range with 3 rooms at a 150 nightly rate
+        @far_off_blocked_check_in = Date.today + 30
+        @far_off_blocked_check_out = Date.today + 33
+
+        block = Hotel::Block.new(
+          blocks_length: 0,
+          check_in_date: @far_off_blocked_check_in,
+          check_out_date: @far_off_blocked_check_out,
+          rooms: [@room_1, @room_2, @room_3],
+          discount_rate: 150
+          )
+
+        block.rooms.each do |room|
+          room.blocks << block
+        end
+      end
+
+      it "returns :UNAVAILABLE for each room that was blocked" do
+        @blocked_rooms.each do |blocked_room|
+          status = blocked_room.status(desired_check_in: @far_off_blocked_check_in,
+                                       desired_check_out: @far_off_blocked_check_out
+                                      )
+          expect(status).must_equal :UNAVAILABLE
+        end
+      end
+
+      it "returns :AVAILABLE for non-blocked rooms" do
+        @unblocked_rooms.each do |unblocked_room|
+          status = unblocked_room.status(desired_check_in: @far_off_blocked_check_in,
+                                         desired_check_out: @far_off_blocked_check_out
+                                        )
+          expect(status).must_equal :AVAILABLE
+        end
+      end
+
+    end
+  end
 end

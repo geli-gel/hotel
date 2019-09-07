@@ -1,12 +1,13 @@
 module Hotel
   class ManagementSystem
     class SystemReservationError < StandardError; end
-    attr_reader :rooms, :reservations
+    attr_reader :rooms, :reservations, :blocks
 
     def initialize
       @NUMBER_OF_ROOMS = 20
       @rooms = initialize_rooms
       @reservations = []
+      @blocks = []
     end
 
     def initialize_rooms
@@ -27,12 +28,55 @@ module Hotel
       end
     end
 
-    def create_reservation(check_in_date:, check_out_date:)
+    def create_block(check_in_date:, check_out_date:, room_numbers:, discount_rate:)
+      rooms_from_numbers = room_numbers.map do |room_number|
+        @rooms.find do |room|
+          room.number == room_number
+        end
+      end
+
+      room_statuses = rooms_from_numbers.map do |room|
+        room.status(desired_check_in: check_in_date, desired_check_out: check_out_date)
+      end
+
+      if room_statuses.any?(:UNAVAILABLE)
+        raise SystemReservationError.new("Cannot create block for rooms that are already reserved or blocked")
+      end
+
+      new_block = Hotel::Block.new(
+        blocks_length: @blocks.length,
+        check_in_date: check_in_date,
+        check_out_date: check_out_date,
+        rooms: rooms_from_numbers,
+        discount_rate: discount_rate
+      )
+      @blocks << new_block
+      rooms_from_numbers.each do |room|
+        room.blocks << new_block
+      end
+
+    end
+
+    def reserve_blocked_room(block_id)
+      block = find_block_by_id(block_id)
+
+      create_reservation(
+        check_in_date: block.check_in_date, 
+        check_out_date: block.check_out_date, 
+        room: block.rooms.sample
+      )
+    end
+
+    def find_block_by_id(block_id)
+      @blocks.find { |block| block.id == block_id }
+    end
+
+    def create_reservation(check_in_date:, check_out_date:, room: choose_room(check_in_date, check_out_date))
       new_reservation = Hotel::Reservation.new(
         check_in_date: check_in_date, 
         check_out_date: check_out_date,
-        room: choose_room(check_in_date, check_out_date)
-        )
+        room: room #choose_room(check_in_date, check_out_date)
+      )
       @reservations << new_reservation
       new_reservation.room.reservations << new_reservation
     end
