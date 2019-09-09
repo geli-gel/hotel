@@ -1,0 +1,41 @@
+- I should pull out the date range checking parts into
+a separate class, DateRange that checks for validity and
+does comparisions (i think?) .. (i think that's what a 
+lot of other people did?)
+
+- I should reconsider whether there are good places to
+use class methods or variables instead of instance 
+methods or variables
+
+- I should determine whether it's better to keep the 
+room nightly_rate stored as a variable in each room 
+or in the ManagementSystem
+
+- For setting rates of rooms on instantiation I should
+think about maybe a CLI that asks for info or a CSV 
+that stores number of rooms, room numbers, nightly rate
+
+- I need to change the status method in Room to a separate 
+method, maybe moved into the future DateRange class, or maybe 
+still in Room but separated out, so that I don't have to use 
+basically a copy pasted version of checking conflicts between 
+reservations and checking conflicts between dates.
+
+- I think there's a better way to increase room/reservation/
+block numbers instead of requiring the current length of rooms/
+reservations/blocks being passed in, maybe those @@ variables 
+Eve was showing me, or maybe something completely different, but 
+for some reason I don't really like the way it looks with for
+example Room instantiation needing the current length of rooms
+to be passed in. IDK maybe it's fine.
+
+- I feel like create_block is a really big method and I maybe 
+created it too hastily, and it looks kind of messy and I bet it
+can be trimmed down or moved into the Block class maybe? or at 
+least trimmed down. I also think it's pretty readable right now 
+though so I want to make sure not to lose that part of it.
+
+- A lot of times I wasn't sure whether I should make methods in
+Room/Block/Reservation or in ManagementSystem, so I would like to 
+re-look at that after seeing other people's Hotels and learning 
+more about OOP.
