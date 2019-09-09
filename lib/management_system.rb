@@ -81,7 +81,7 @@ module Hotel
       new_reservation = Hotel::Reservation.new(
         check_in_date: check_in_date, 
         check_out_date: check_out_date,
-        room: room #choose_room(check_in_date, check_out_date)
+        room: room
       )
       @reservations << new_reservation
       new_reservation.room.reservations << new_reservation
