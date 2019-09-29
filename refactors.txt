@@ -1,25 +1,34 @@
+***********   ***********   ***********   ***********   ***********   
 - I should pull out the date range checking parts into
 a separate class, DateRange that checks for validity and
 does comparisions (i think?) .. (i think that's what a 
 lot of other people did?)
+  -9/29/19 revisit notes: I think separating this out would definitely help increase single responsibility in the program.
+***********   ***********   ***********   ***********   ***********   
 
 - I should reconsider whether there are good places to
 use class methods or variables instead of instance 
 methods or variables
+  -9/29/19 revisit notes: Not sure, will try to think about this while refactoring
 
 - I should determine whether it's better to keep the 
 room nightly_rate stored as a variable in each room 
 or in the ManagementSystem
+  -9/29/19 revisit notes: I could set it stored in management system, and then each room has a default "rate_multiplier" variable that is defaulted to "1", then if the price is different... idk. I don't think it will make it easier to change room prices this way. I think I will leave it as is for now since there is no need to change room prices except for blocked rooms which just take in a discount rate.
 
 - For setting rates of rooms on instantiation I should
 think about maybe a CLI that asks for info or a CSV 
 that stores number of rooms, room numbers, nightly rate
+  -9/29/19 revisit notes: no need to think about CLI right now.
 
+***********   ***********   ***********   ***********   ***********   
 - I need to change the status method in Room to a separate 
 method, maybe moved into the future DateRange class, or maybe 
 still in Room but separated out, so that I don't have to use 
 basically a copy pasted version of checking conflicts between 
 reservations and checking conflicts between dates.
+  -9/29/19 revisit notes: Yes I definitely want to fix this, I think it should go into the future DateRange class.
+***********   ***********   ***********   ***********   ***********   
 
 - I think there's a better way to increase room/reservation/
 block numbers instead of requiring the current length of rooms/
@@ -28,14 +37,20 @@ Eve was showing me, or maybe something completely different, but
 for some reason I don't really like the way it looks with for
 example Room instantiation needing the current length of rooms
 to be passed in. IDK maybe it's fine.
+  -9/29/19 revisit notes: I think it's fine for now.
+
 
 - I feel like create_block is a really big method and I maybe 
 created it too hastily, and it looks kind of messy and I bet it
 can be trimmed down or moved into the Block class maybe? or at 
 least trimmed down. I also think it's pretty readable right now 
 though so I want to make sure not to lose that part of it.
+  -9/29/19 revisit notes: yeah, I am not sure if it should be moved into the block class or not .... hmm. I think it belongs where it is but I'm not sure.
 
+***********   ***********   ***********   ***********   ***********   
 - A lot of times I wasn't sure whether I should make methods in
 Room/Block/Reservation or in ManagementSystem, so I would like to 
 re-look at that after seeing other people's Hotels and learning 
 more about OOP.
+  -9/29/19 revisit notes: from the Revisit Hotel readme it sounds like it's a noob thing to do to put so many methods in ManagementSystem. I'll try to look at it and see how things can be moved around. I should try to make it so that ManagementSystem asks the other classes what to do, and doesn't tell them how to do anything.
+***********   ***********   ***********   ***********   ***********   
