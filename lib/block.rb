@@ -1,10 +1,11 @@
+require_relative 'date_range'
+
 module Hotel
-  class Block
+  class Block < Hotel::DateRange
     attr_reader :id, :check_in_date, :check_out_date, :rooms, :available_rooms
     def initialize(blocks_length:, check_in_date:, check_out_date:, rooms:, discount_rate:)
+      super(check_in_date, check_out_date)
       @id = blocks_length + 1
-      @check_in_date = check_in_date
-      @check_out_date = check_out_date
       @rooms = rooms
       @discount_rate = discount_rate
       @available_rooms = rooms
@@ -15,6 +16,9 @@ module Hotel
       return @available_rooms.pop
     end
 
-  end
+    def date_range_conflict?(desired_check_in, desired_check_out)
+      super(desired_check_in, desired_check_out)
+    end
 
+  end
 end
